@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090a0d">
+<title>Vail AI — Reality Unfiltered</title>
+<style>
+:root{color-scheme:dark;--bg:#070708;--panel:#111112;--line:#292022;--muted:#969095;--text:#f5f2f2;--accent:#ff3038}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#451015 0%,transparent 48%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+.app{max-width:980px;margin:auto;min-height:100vh;display:flex;flex-direction:column;padding:0 22px}
+header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}
+.brand{font-weight:800;letter-spacing:.16em;font-size:17px}.brand span{color:var(--accent)}.tag{color:var(--muted);font-size:12px;letter-spacing:.08em}
+.status{font-size:12px;color:#bcb4d8;border:1px solid #ff303835;padding:6px 10px;border-radius:20px}
+main{flex:1;display:flex;flex-direction:column;align-items:center;width:100%;padding:64px 0 28px}
+.hero{text-align:center;margin:0 auto 38px}.orb{width:54px;height:54px;border-radius:18px;margin:0 auto 20px;background:linear-gradient(145deg,#ff6970,#c91520 65%,#4a080d);box-shadow:0 0 55px #ff263535;position:relative}.orb:after{content:"";position:absolute;inset:13px;border:1px solid #fff9;border-radius:50%}
+h1{font-size:clamp(34px,6vw,52px);line-height:1.08;letter-spacing:-.045em;margin:0 0 12px}.hero p{color:var(--muted);margin:0;font-size:15px}
+.chat{width:100%;max-width:760px;display:flex;flex-direction:column;gap:16px;flex:1}
+.welcome{border:1px solid var(--line);background:linear-gradient(140deg,#151720,#101116);border-radius:18px;padding:22px 24px}
+.welcome strong{display:block;margin-bottom:6px;font-size:15px}.welcome p{color:#b3b7c2;margin:0;font-size:14px}
+.messages{display:flex;flex-direction:column;gap:16px}.message{max-width:85%;padding:13px 16px;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere}.user{align-self:flex-end;background:#2b1518;border:1px solid #ff303855}.assistant{align-self:flex-start;background:#14161c;border:1px solid var(--line)}.label{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.composer{position:sticky;bottom:0;width:100%;max-width:760px;margin:24px auto 0;padding:12px 0 18px;background:linear-gradient(transparent,var(--bg) 18%)}
+form{display:flex;gap:10px;align-items:flex-end;background:#14161c;border:1px solid #343844;border-radius:18px;padding:10px;box-shadow:0 12px 45px #0007}
+textarea{flex:1;resize:none;min-height:42px;max-height:150px;border:0;outline:0;background:transparent;color:var(--text);font:inherit;padding:10px 8px}textarea::placeholder{color:#777e8c}
+button{border:0;cursor:pointer;border-radius:12px;background:var(--accent);color:#18090a;font-weight:750;padding:11px 17px;min-height:42px}button:hover{filter:brightness(1.08)}button:disabled{opacity:.45;cursor:not-allowed}
+.note{text-align:center;color:#737987;font-size:11px;margin-top:10px}
+footer{text-align:center;padding:14px 0 22px;color:#626875;font-size:11px}
+@media(max-width:600px){.app{padding:0 15px}main{padding-top:46px}.hero{margin-bottom:28px}.welcome{padding:18px}.message{max-width:94%}.tag{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div><div class="brand">VAIL <span>AI</span></div><div class="tag">REALITY UNFILTERED</div></div><div class="status">● DEMO MODE</div></header>
+<main>
+<section class="hero"><div class="orb"></div><h1>Reality, unfiltered.</h1><p>Ask anything. Get a direct answer.</p></section>
+<section class="chat" aria-live="polite">
+<div class="welcome"><strong>Welcome to Vail AI.</strong><p>No fake certainty. No unnecessary sugarcoating. If the answer isn't known, Vail should say so. This preview uses demo replies until an AI service is connected.</p></div>
+<div class="messages" id="messages"></div>
+</section>
+<div class="composer"><form id="chatForm"><textarea id="prompt" rows="1" placeholder="Ask Vail anything..." aria-label="Message Vail AI"></textarea><button id="send" type="submit">Send ↗</button></form><div class="note">Be curious. Ask freely. Verify important information.</div></div>
+</main>
+<footer>VAIL AI · REALITY UNFILTERED</footer>
+</div>
+<script>
+const form=document.getElementById('chatForm'),input=document.getElementById('prompt'),messages=document.getElementById('messages'),send=document.getElementById('send');
+function addMessage(text,who){const wrap=document.createElement('div');wrap.className='message '+who;const label=document.createElement('div');label.className='label';label.textContent=who==='user'?'You':'Vail AI · Demo';const body=document.createElement('div');body.textContent=text;wrap.append(label,body);messages.append(wrap);wrap.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function demoReply(q){const s=q.toLowerCase();if(s.includes('who are you'))return "I'm Vail AI — a preview of an assistant built around direct answers, clear uncertainty, and reality without the filter.";if(s.includes('truth')||s.includes('lie'))return "The honest answer depends on the specific claim. Share what you want checked and I can help separate evidence from assumptions. This preview can't verify facts yet.";return "That's a good question. The Vail AI interface is working, but it isn't connected to a live AI model yet, so I won't pretend this is a real answer. Connect an AI backend to enable genuine conversations.";}
+form.addEventListener('submit',e=>{e.preventDefault();const q=input.value.trim();if(!q)return;addMessage(q,'user');input.value='';send.disabled=true;setTimeout(()=>{addMessage(demoReply(q),'assistant');send.disabled=false;input.focus();},350);});
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();}});
+input.addEventListener('input',()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,150)+'px';});
+</script>
+</body></html>
