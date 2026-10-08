@@ -38,10 +38,15 @@ export default async function handler(req, res) {
         error: data.error?.message || "OpenAI request failed"
       });
     }
+const reply = data.output
+  ?.flatMap(item => item.content || [])
+  .filter(item => item.type === "output_text")
+  .map(item => item.text)
+  .join("\n") || "No response received.";
 
-    return res.status(200).json({
-      reply: data.output_text
-    });
+return res.status(200).json({
+  reply
+});
   } catch (error) {
     return res.status(500).json({
       error: "Something went wrong."
